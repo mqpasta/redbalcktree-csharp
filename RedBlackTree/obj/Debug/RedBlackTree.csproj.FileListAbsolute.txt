@@ -1,7 +1,0 @@
-C:\Users\AD\source\repos\RedBlackTree\RedBlackTree\bin\Debug\RedBlackTree.exe.config
-C:\Users\AD\source\repos\RedBlackTree\RedBlackTree\bin\Debug\RedBlackTree.exe
-C:\Users\AD\source\repos\RedBlackTree\RedBlackTree\bin\Debug\RedBlackTree.pdb
-C:\Users\AD\source\repos\RedBlackTree\RedBlackTree\obj\Debug\RedBlackTree.csprojResolveAssemblyReference.cache
-C:\Users\AD\source\repos\RedBlackTree\RedBlackTree\obj\Debug\RedBlackTree.csproj.CoreCompileInputs.cache
-C:\Users\AD\source\repos\RedBlackTree\RedBlackTree\obj\Debug\RedBlackTree.exe
-C:\Users\AD\source\repos\RedBlackTree\RedBlackTree\obj\Debug\RedBlackTree.pdb
