@@ -99,6 +99,7 @@ namespace RedBlackTree
         public void Display()
         {
             InOrderWalk(root);
+            Console.WriteLine();
         }
 
         private void InOrderWalk(BNode node)
@@ -244,20 +245,83 @@ namespace RedBlackTree
             return true;
         }
 
-        public BNode Search(BNode node, int data)
+        public ref BNode Search(ref BNode node, int data)
         {
             if (node == null)
-                return null;
+                return ref node;
 
             if (node.Data == data)
-                return node;
+                return ref node;
             if (data < node.Data)
-                return Search(node.left, data);
+                return ref Search(ref node.left, data);
             else
-                return Search(node.right, data);
+                return ref Search(ref node.right, data);
+        }
+
+        public BNode Delete(BNode node, BNode parent,int data)
+        {
+            if (node == null)
+                return null; // not found
+
+            if (data < node.Data)
+                node.left = Delete(node.left, node, data);
+            else if (data > node.Data)
+                node.right = Delete(node.right, node, data);
+            else if(data == node.Data)
+            {
+                if (node.left == null)
+                {
+                    node = node.right;
+                    if (node != null)
+                        node.parent = parent;
+                }
+                else if(node.right == null)
+                {
+                    node = node.left;
+                    node.parent = parent;
+                }
+                else
+                {
+                    node.Data = Minimum(node.right).Data;
+                    node.right = DeleteLeftMost(node.right, node);
+                }
+            } 
+
+            return node;
+        }
+
+        public BNode DeleteLeftMost(BNode node, BNode parent)
+        {
+            if (node.left == null)
+            {
+                node = node.right;
+                if (node != null)
+                    node.parent = parent;
+
+                return node;
+            }
+
+            node.left = DeleteLeftMost(node.left, node);
+
+            return node;
+        }
+        public BNode Minimum(BNode node)
+        {
+            if (node != null)
+            {
+                if (node.left == null)
+                    return node;
+                else
+                    return Minimum(node.left);
+
+            }
+
+            return null;
         }
 
         public BNode GetRoot() { return root; }
+
+        public ref BNode GetRootRef { get { return ref root; } }
     }
 
     class Program
@@ -266,7 +330,7 @@ namespace RedBlackTree
         {
             //testInsert();
             //testInsert2();
-            testInsert3();
+            //testInsert3();
             //testRotateLeft();
             //testRotateRight();
             //testSibling();
@@ -274,6 +338,8 @@ namespace RedBlackTree
             //testFixupCase1();
             //testFixUpCase2();
             //testFixUpCase3();
+            //testMin();
+            testDelete();
         }
         
         static void testInsert()
@@ -314,6 +380,32 @@ namespace RedBlackTree
             rb.Insert(30);
             rb.Insert(15);
             rb.Display();
+        }
+
+        static void testDelete()
+        {
+            RedBlackTree rb = new RedBlackTree();
+            rb.Insert(10);
+            rb.Insert(20);
+            rb.Insert(25);
+            rb.Insert(30);
+            rb.Insert(15);
+            rb.Display();
+
+            BNode root = rb.Delete(rb.GetRoot(),null, 20);
+            rb.Display();
+        }
+
+        static void testMin()
+        {
+            RedBlackTree rb = new RedBlackTree();
+            rb.Insert(10);
+            rb.Insert(20);
+            rb.Insert(3);
+            rb.Insert(50);
+            rb.Display();
+
+            Console.WriteLine("min:{0}", rb.Minimum(rb.GetRoot()));
         }
 
         static void testRotateLeft()
@@ -365,10 +457,10 @@ namespace RedBlackTree
             rb.Insert(10);
 
             rb.Display();
-            BNode node1 = rb.Search(rb.GetRoot(), 5);
-            Console.WriteLine(node1.Data);
-            BNode sibling = rb.GetSibling(node1);
-            Console.WriteLine("Sibling:{0}", (sibling != null) ? sibling.ToString() :"not found");
+            //BNode node1 = rb.Search(rb.GetRoot(), 5);
+            //Console.WriteLine(node1.Data);
+            //BNode sibling = rb.GetSibling(node1);
+            //Console.WriteLine("Sibling:{0}", (sibling != null) ? sibling.ToString() :"not found");
 
         }
 
@@ -383,18 +475,18 @@ namespace RedBlackTree
             rb.Insert(35);
             rb.Insert(75);
 
-            rb.Display();
-            BNode n = rb.Search(rb.GetRoot(), 12);
-            BNode uncle = rb.GetUncle(n);
-            Console.WriteLine("Uncle:{0}", (uncle != null) ? uncle.ToString() : "not found");
+            //rb.Display();
+            ////BNode n = rb.Search(rb.GetRoot(), 12);
+            //BNode uncle = rb.GetUncle(n);
+            //Console.WriteLine("Uncle:{0}", (uncle != null) ? uncle.ToString() : "not found");
 
-            n = rb.Search(rb.GetRoot(), 8);
-            uncle = rb.GetUncle(n);
-            Console.WriteLine("Uncle:{0}", (uncle != null) ? uncle.ToString() : "not found");
+            ////n = rb.Search(rb.GetRoot(), 8);
+            //uncle = rb.GetUncle(n);
+            //Console.WriteLine("Uncle:{0}", (uncle != null) ? uncle.ToString() : "not found");
 
-            n = rb.Search(rb.GetRoot(), 35);
-            uncle = rb.GetUncle(n);
-            Console.WriteLine("Uncle:{0}", (uncle != null) ? uncle.ToString() : "not found");
+            ////n = rb.Search(rb.GetRoot(), 35);
+            //uncle = rb.GetUncle(n);
+            //Console.WriteLine("Uncle:{0}", (uncle != null) ? uncle.ToString() : "not found");
         }
 
         static void testFixupCase1()
@@ -405,10 +497,10 @@ namespace RedBlackTree
             rb.Insert(15);
             rb.Insert(3);
 
-            BNode nodeToFix = rb.Search(rb.GetRoot(), 3);
-            BNode fix = rb.insertFixUp(nodeToFix);
+            //BNode nodeToFix = rb.Search(rb.GetRoot(), 3);
+            //BNode fix = rb.insertFixUp(nodeToFix);
 
-            rb.Display(fix);
+            //rb.Display(fix);
 
         }
 
